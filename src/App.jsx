@@ -249,9 +249,15 @@ export default function App() {
 
   return (
     <div className="shell">
+      <div className="sprinkles" aria-hidden="true">
+        {Array.from({ length: 14 }, (_, i) => (
+          <i key={i} />
+        ))}
+      </div>
       <main className="page">
         <header className="top">
           <div>
+            <p className="brand">Dessert Games</p>
             <p className="eyebrow">{tier.name} rank</p>
             <h1>{category.label} Chain</h1>
             <p className="lede">
@@ -392,17 +398,18 @@ export default function App() {
           <button className="restart" type="button" onClick={() => startChain(category)}>
             New chain
           </button>
+          <p className="studio">A Dessert Games original</p>
         </section>
       </main>
 
       {gameOver && (
         <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="game-over-title">
           <div className="modal">
-            <p className="eyebrow">Time’s up</p>
+            <p className="eyebrow">Timer dinged</p>
             <h2 id="game-over-title">Game over</h2>
             <p>
               You didn’t find a valid {category.singular} starting with{" "}
-              <strong>{required.toUpperCase()}</strong> in time.
+              <strong>{required.toUpperCase()}</strong> before the frosting set.
             </p>
             <div className="modal-stats">
               <Score label="Streak" value={streak} rank={tier.name} />

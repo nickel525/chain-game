@@ -15,10 +15,10 @@ body,
 body {
   font-family: "Outfit", system-ui, sans-serif;
   background:
-    radial-gradient(1200px 600px at 10% -10%, #ffe7b3 0%, transparent 55%),
-    radial-gradient(900px 500px at 110% 10%, #b7f0c6 0%, transparent 50%),
-    linear-gradient(180deg, #f7f1e3 0%, #efe4cc 100%);
-  color: #1f2a1a;
+    radial-gradient(1100px 560px at 8% -8%, #ffd0c4 0%, transparent 52%),
+    radial-gradient(900px 480px at 108% 8%, #f6d7a4 0%, transparent 50%),
+    linear-gradient(180deg, #fff7ef 0%, #f4dcc6 100%);
+  color: #3f2a22;
 }
 
 button,
