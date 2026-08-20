@@ -249,11 +249,6 @@ export default function App() {
 
   return (
     <div className="shell">
-      <div className="sprinkles" aria-hidden="true">
-        {Array.from({ length: 14 }, (_, i) => (
-          <i key={i} />
-        ))}
-      </div>
       <main className="page">
         <header className="top">
           <div>
@@ -320,7 +315,9 @@ export default function App() {
               </select>
             </label>
             <p className="need">
-              Next {category.singular} must start with
+              <span className="need-copy">
+                Next {category.singular} must start with
+              </span>
               <span key={popNonce} className={`letter ${popping ? "pop" : ""}`}>
                 {required.toUpperCase()}
               </span>
@@ -430,7 +427,10 @@ function Score({ label, value, muted, popping, rank, urgent }) {
     <div
       className={`score ${muted ? "muted" : ""} ${popping ? "pop" : ""} ${urgent ? "urgent" : ""}`}
     >
-      <span>{rank ? `${label} · ${rank}` : label}</span>
+      <span>
+        {label}
+        {rank ? <span className="rank-tag"> · {rank}</span> : null}
+      </span>
       <strong>{value}</strong>
     </div>
   );
