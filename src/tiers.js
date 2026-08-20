@@ -8,17 +8,27 @@ export const TIERS = [
   { min: 40, id: "mythic", name: "Mythic" },
 ];
 
-export function getTier(streak) {
-  let current = TIERS[0];
-  for (const tier of TIERS) {
+export const STRETCH_TIERS = [
+  { min: 0, id: "spark", name: "Spark" },
+  { min: 5, id: "bronze", name: "Bronze" },
+  { min: 7, id: "silver", name: "Silver" },
+  { min: 9, id: "gold", name: "Gold" },
+  { min: 11, id: "ruby", name: "Ruby" },
+  { min: 13, id: "sapphire", name: "Sapphire" },
+  { min: 15, id: "mythic", name: "Mythic" },
+];
+
+export function getTier(streak, tiers = TIERS) {
+  let current = tiers[0];
+  for (const tier of tiers) {
     if (streak >= tier.min) current = tier;
   }
   return current;
 }
 
-export function getNextTier(tier) {
-  const index = TIERS.findIndex((item) => item.id === tier.id);
-  return TIERS[index + 1] ?? null;
+export function getNextTier(tier, tiers = TIERS) {
+  const index = tiers.findIndex((item) => item.id === tier.id);
+  return tiers[index + 1] ?? null;
 }
 
 export function tierProgress(streak, tier, next) {

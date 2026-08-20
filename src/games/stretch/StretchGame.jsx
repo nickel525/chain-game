@@ -1,10 +1,17 @@
 import { useEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
-import { getNextTier, getTier, tierProgress } from "../../tiers";
+import { getNextTier, getTier, STRETCH_TIERS, tierProgress } from "../../tiers";
 import { isCompleteWord, randomLetter, wordsWith } from "./dictionary";
 import "./StretchGame.css";
 
 const BEST_KEY = "stretch-best";
+const ROUND_SECONDS = 120;
+
+function formatTime(seconds) {
+  const mins = Math.floor(seconds / 60);
+  const secs = seconds % 60;
+  return `${mins}:${String(secs).padStart(2, "0")}`;
+}
 
 function readBest() {
   const raw =
@@ -74,9 +81,23 @@ function playWordSet(audioRef, length) {
   });
 }
 
-function Score({ label, value, muted, popping }) {
+function playGameOver(audioRef) {
+  const ctx = getAudio(audioRef);
+  if (!ctx) return;
+  playTone(ctx, { type: "sine", start: 220, end: 110, gain: 0.14, duration: 0.32 });
+  playTone(ctx, {
+    type: "triangle",
+    start: 165,
+    end: 70,
+    gain: 0.12,
+    duration: 0.4,
+    delay: 0.08,
+  });
+}
+
+function Score({ label, value, muted, popping, urgent }) {
   return (
-    <div className={`score ${muted ? "muted" : ""} ${popping ? "pop" : ""}`}>
+    <div className={`score ${muted ? "muted" : ""} ${popping ? "pop" : ""} ${urgent ? "urgent" : ""}`}>
       <span>{label}</span>
       <strong>{value}</strong>
     </div>
@@ -110,6 +131,9 @@ export default function StretchGame() {
   const [shake, setShake] = useState(false);
   const [best, setBest] = useState(readBest);
   const [gameOver, setGameOver] = useState(false);
+  const [timedOut, setTimedOut] = useState(false);
+  const [secondsLeft, setSecondsLeft] = useState(ROUND_SECONDS);
+  const [timerOn, setTimerOn] = useState(false);
   const [freshIndex, setFreshIndex] = useState(0);
   const [popNonce, setPopNonce] = useState(0);
   const [candidates, setCandidates] = useState(() => wordsWith(stem));
@@ -118,8 +142,9 @@ export default function StretchGame() {
   const audioRef = useRef(null);
 
   const length = stem.length;
-  const tier = getTier(length);
-  const nextTier = getNextTier(tier);
+  const longest = candidates.reduce((max, word) => Math.max(max, word.length), length);
+  const tier = getTier(length, STRETCH_TIERS);
+  const nextTier = getNextTier(tier, STRETCH_TIERS);
   const progress = tierProgress(length, tier, nextTier);
 
   useEffect(() => {
@@ -133,6 +158,25 @@ export default function StretchGame() {
     if (!gameOver) backRef.current?.focus();
   }, [gameOver]);
 
+  useEffect(() => {
+    if (!timerOn || gameOver) return undefined;
+    const id = window.setInterval(() => {
+      setSecondsLeft((value) => {
+        if (value <= 1) {
+          setTimedOut(true);
+          setGameOver(true);
+          return 0;
+        }
+        return value - 1;
+      });
+    }, 1000);
+    return () => window.clearInterval(id);
+  }, [timerOn, gameOver]);
+
+  useEffect(() => {
+    if (timedOut) playGameOver(audioRef);
+  }, [timedOut]);
+
   function startGame() {
     const letter = randomLetter();
     setStem(letter);
@@ -140,6 +184,9 @@ export default function StretchGame() {
     setError("");
     setShake(false);
     setGameOver(false);
+    setTimedOut(false);
+    setSecondsLeft(ROUND_SECONDS);
+    setTimerOn(false);
     setFreshIndex(0);
     setPopNonce(0);
     setBest(readBest());
@@ -171,6 +218,7 @@ export default function StretchGame() {
     setError("");
     setFreshIndex(side === "front" ? 0 : next.length - 1);
     setPopNonce((value) => value + 1);
+    setTimerOn(true);
 
     if (finished) {
       setGameOver(true);
@@ -206,6 +254,12 @@ export default function StretchGame() {
             </p>
           </div>
           <div className="scores">
+            <Score
+              label="Time"
+              value={formatTime(secondsLeft)}
+              muted
+              urgent={timerOn && secondsLeft <= 10 && !gameOver}
+            />
             <Score key={popNonce} label="Length" value={length} popping={popNonce > 0} />
             <Score label="Best" value={best} muted />
           </div>
@@ -226,6 +280,9 @@ export default function StretchGame() {
             </div>
           </div>
 
+          <p className="stretch-longest">
+            Longest possible: {longest}
+          </p>
           <div className={`stretch-row ${shake ? "shake" : ""}`}>
             <LetterSlot
               id="stretch-front"
@@ -264,12 +321,25 @@ export default function StretchGame() {
       {gameOver && (
         <div className="overlay" role="dialog" aria-modal="true" aria-labelledby="stretch-over-title">
           <div className="modal">
-            <p className="eyebrow">That’s a word</p>
-            <h2 id="stretch-over-title">{stem.toUpperCase()}</h2>
-            <p>
-              You built it out to <strong>{length}</strong>{" "}
-              {length === 1 ? "letter" : "letters"}.
-            </p>
+            {timedOut ? (
+              <>
+                <p className="eyebrow">Timer dinged</p>
+                <h2 id="stretch-over-title">Game over</h2>
+                <p>
+                  You didn’t finish a real word in time. You had stretched it to{" "}
+                  <strong>{stem.toUpperCase()}</strong>.
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="eyebrow">That’s a word</p>
+                <h2 id="stretch-over-title">{stem.toUpperCase()}</h2>
+                <p>
+                  You built it out to <strong>{length}</strong>{" "}
+                  {length === 1 ? "letter" : "letters"}.
+                </p>
+              </>
+            )}
             <div className="modal-stats">
               <Score label="Length" value={length} />
               <Score label="Best" value={best} muted />
