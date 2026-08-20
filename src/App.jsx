@@ -395,7 +395,7 @@ export default function App() {
           <button className="restart" type="button" onClick={() => startChain(category)}>
             New chain
           </button>
-          <p className="studio">A Dessert Games original</p>
+          <p className="studio">A Nikos and Vince original</p>
         </section>
       </main>
 
