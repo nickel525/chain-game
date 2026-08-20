@@ -1,0 +1,67 @@
+.scoop-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 12px;
+  margin: 8px 0 16px;
+}
+
+.scoop {
+  min-height: 96px;
+  padding: 16px 14px;
+  border-radius: 18px;
+  border: 1px solid rgba(196, 92, 106, 0.16);
+  background: #fffaf4;
+  color: #3f2a22;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.12rem;
+  line-height: 1.2;
+  font-weight: 600;
+  cursor: pointer;
+  text-wrap: balance;
+}
+
+.scoop:hover:not(:disabled),
+.scoop:focus-visible:not(:disabled) {
+  border-color: #e8a85a;
+  box-shadow: 0 0 0 4px rgba(232, 168, 90, 0.18);
+}
+
+.scoop:disabled {
+  cursor: default;
+}
+
+.scoop.odd {
+  background: color-mix(in srgb, var(--accent) 18%, #fffaf4);
+  border-color: color-mix(in srgb, var(--accent) 50%, rgba(196, 92, 106, 0.16));
+}
+
+.scoop.miss {
+  background: #f8e4e6;
+  border-color: #c45c6a;
+}
+
+.scoop-rule {
+  min-height: 3.2em;
+  margin: 0 0 8px;
+  color: #7a5344;
+  line-height: 1.45;
+  text-align: center;
+}
+
+.scoop-rule.open {
+  color: #3f2a22;
+  font-weight: 600;
+}
+
+.scoop-board .restart:disabled {
+  opacity: 0.4;
+  cursor: not-allowed;
+}
+
+@media (max-width: 720px) {
+  .scoop {
+    min-height: 84px;
+    font-size: 1rem;
+    padding: 14px 12px;
+  }
+}
