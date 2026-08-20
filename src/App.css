@@ -30,6 +30,20 @@
   margin-bottom: 10px;
 }
 
+.back-link {
+  display: inline-block;
+  margin-bottom: 12px;
+  color: #7a5344;
+  font-size: 0.85rem;
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.back-link:hover,
+.back-link:focus-visible {
+  color: #c45c6a;
+}
+
 .top {
   display: flex;
   justify-content: space-between;
@@ -657,6 +671,14 @@ input:disabled {
     margin-bottom: 4px;
   }
 
+  .top .brand {
+    display: none;
+  }
+
+  .back-link {
+    margin-bottom: 8px;
+  }
+
   .top {
     flex-direction: column;
     align-items: stretch;
@@ -665,18 +687,18 @@ input:disabled {
   }
 
   .top .eyebrow,
-  .lede {
+  .top .lede {
     display: none;
   }
 
-  h1 {
+  .top h1 {
     font-size: clamp(1.7rem, 8vw, 2.2rem);
     margin-bottom: 0;
   }
 
   .scores {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(auto-fit, minmax(90px, 1fr));
     gap: 8px;
     justify-content: stretch;
   }
@@ -837,7 +859,7 @@ input:disabled {
     padding-top: 12px;
   }
 
-  h1 {
+  .top h1 {
     font-size: 1.55rem;
   }
 

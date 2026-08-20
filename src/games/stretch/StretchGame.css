@@ -1,0 +1,109 @@
+.stretch-row {
+  display: flex;
+  align-items: flex-end;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 18px 4px 12px;
+}
+
+.stretch-stem {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 8px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.stretch-tile,
+.stretch-slot input {
+  width: 52px;
+  height: 60px;
+  display: grid;
+  place-items: center;
+  border-radius: 14px;
+  font-family: "Fraunces", Georgia, serif;
+  font-size: 1.8rem;
+  line-height: 1;
+}
+
+.stretch-tile {
+  background: #fffaf4;
+  border: 1px solid rgba(196, 92, 106, 0.12);
+}
+
+.stretch-tile.fresh {
+  border-color: color-mix(in srgb, var(--accent) 45%, rgba(196, 92, 106, 0.12));
+  background: color-mix(in srgb, var(--accent) 16%, #fffaf4);
+  animation: popIn 560ms cubic-bezier(0.16, 1.4, 0.32, 1);
+}
+
+.stretch-slot {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  flex: 0 0 auto;
+}
+
+.stretch-slot-label {
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #b8896a;
+}
+
+.stretch-slot input {
+  flex: none;
+  min-width: 52px;
+  padding: 0;
+  text-align: center;
+  text-transform: uppercase;
+  background: rgba(255, 250, 244, 0.45);
+  border: 1.5px dashed rgba(196, 92, 106, 0.38);
+  color: #3f2a22;
+}
+
+.stretch-slot input:focus {
+  border-style: solid;
+  border-color: #e8a85a;
+  box-shadow: 0 0 0 4px rgba(232, 168, 90, 0.22);
+  background: #fffaf4;
+}
+
+.stretch-slot input:disabled {
+  opacity: 0.55;
+  cursor: not-allowed;
+}
+
+.stretch-board .error {
+  text-align: center;
+}
+
+@media (max-width: 720px) {
+  .stretch-tile,
+  .stretch-slot input {
+    width: 44px;
+    height: 52px;
+    min-width: 44px;
+    font-size: 1.5rem;
+    border-radius: 12px;
+  }
+
+  .stretch-slot input {
+    font-size: 16px;
+  }
+}
+
+@media (max-width: 420px) {
+  .stretch-tile,
+  .stretch-slot input {
+    width: 40px;
+    height: 48px;
+    min-width: 40px;
+    font-size: 1.35rem;
+  }
+}
